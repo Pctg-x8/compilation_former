@@ -15,8 +15,8 @@ fn main()
     let infile = Path::new(matches.value_of("input").unwrap());
     let outfile = matches.value_of("output").map(Path::new).map(Cow::from)
         .unwrap_or_else(|| PathBuf::from(format!("{}_16_44100.wav", infile.file_stem().unwrap_or(OsStr::new("")).to_string_lossy())).into());
-    let target_peak = matches.value_of("peak").map(|x| x.parse::<f32>().expect("peak option requires floating number"))
-        .unwrap_or(0.0);
+    let target_peak = matches.value_of("peak").map(|x| x.parse::<f32>().expect("peak option requires floating number(default = -6.0dB)"))
+        .unwrap_or(-6.0);
     let target_mag = f32::powf(10.0, target_peak / 20.0);
     
     println!("Processing: {} ---> {}", infile.display(), outfile.display());
