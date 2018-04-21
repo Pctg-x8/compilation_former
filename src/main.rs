@@ -10,7 +10,7 @@ fn main()
         .author("S.Percentage/JourneyCat <Syn.Tri.Naga@gmail.com>").about("Normalizes wav file and generates 16-bit 44.1kHz")
         .arg(Arg::with_name("output").short("o").long("out").value_name("FILE").help("Specifies an output filename").takes_value(true))
         .arg(Arg::with_name("input").required(true).index(1))
-        .arg(Arg::with_name("peak").short("p").long("peak").help("Specifies the target peak(in dB)").takes_value(true).required(false))
+        .arg(Arg::with_name("peak").short("p").long("peak").value_name("dB").help("Specifies the target peak(in dB)").takes_value(true).required(false))
         .get_matches();
     let infile = Path::new(matches.value_of("input").unwrap());
     let outfile = matches.value_of("output").map(Path::new).map(Cow::from)
