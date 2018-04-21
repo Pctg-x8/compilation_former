@@ -2,6 +2,7 @@ extern crate hound;
 extern crate clap; use clap::{App, Arg};
 use std::path::{Path, PathBuf}; use std::borrow::Cow;
 use std::ffi::OsStr;
+use std::time::Instant;
 
 fn main()
 {
@@ -18,6 +19,7 @@ fn main()
         .unwrap_or(0.0);
     let target_mag = f32::powf(10.0, target_peak / 20.0);
     
+    println!("Processing: {} ---> {}", infile.display(), outfile.display());
     let reader = hound::WavReader::open(infile).expect("Couldn't open input file");
     let spec = hound::WavSpec
     {
@@ -27,6 +29,17 @@ fn main()
     let mut writer = hound::WavWriter::create(outfile, spec).expect("Couldn't open output file");
     let wv: Vec<f32> = reader.into_samples().collect::<Result<_, _>>().unwrap();
     let peak = wv.iter().fold(0.0, |a, &x| f32::abs(x).max(a));
-    for w in wv.iter().map(|&x| target_mag * x / peak) { writer.write_sample((w * 32767.0) as i16).unwrap(); }
+    println!("peak: {} dB", 20.0 * peak.log10());
+    let (start, mut last_print) = (Instant::now(), Instant::now());
+    for (i, w) in wv.iter().map(|&x| target_mag * x / peak).enumerate()
+    {
+        if last_print.elapsed() >= std::time::Duration::from_secs(1)
+        {
+            println!("- Writing... {} sample", i); last_print = Instant::now();
+        }
+        writer.write_sample((w * 32767.0) as i16).unwrap();
+    }
     writer.finalize().unwrap();
+    let e = start.elapsed();
+    println!("Process Completed! elapsed {} ms", (e.subsec_nanos() as u64 / 1_000_000) + e.as_secs() * 1000);
 }
