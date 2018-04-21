@@ -1,0 +1,8 @@
+[package]
+name = "compilation_former"
+version = "0.1.0"
+authors = ["S.Percentage <Syn.Tri.Naga@gmail.com>"]
+
+[dependencies]
+hound = "3.4"
+clap = "2.31"
