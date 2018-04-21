@@ -5,7 +5,7 @@ CompilationFormer
 
 ## ダウンロード/ビルド
 
-[exeはGitHub Releaseから](https://github.com/Pctg-x8/compilation_former/releases/tag/v1.0)
+[exeはGitHub Releaseから](https://github.com/Pctg-x8/compilation_former/releases)
 
 Mac向けバイナリはないので各自でビルドしてください(気が向いたら用意するかも)
 Rust開発環境を持っている人はリポジトリをクローンして`cargo build [--release]`
